@@ -106,6 +106,69 @@ map <leader>l :FufLine<CR>
 map <leader>n :bprevious<CR>
 map <leader>m :bnext<CR>
 
+
+" ------------------
+" ARROW KEYS
+" ------------------
+function! DelEmptyLineAbove()
+    if line(".") == 1
+        return
+    endif
+    let l:line = getline(line(".") - 1)
+    if l:line =~ '^\s*$'
+        let l:colsave = col(".")
+        .-1d
+        silent normal! <C-y>
+        call cursor(line("."), l:colsave)
+    endif
+endfunction
+
+function! AddEmptyLineAbove()
+    let l:scrolloffsave = &scrolloff
+    " Avoid jerky scrolling with ^E at top of window
+    set scrolloff=0
+    call append(line(".") - 1, "")
+    if winline() != winheight(0)
+        silent normal! <C-e>
+    endif
+    let &scrolloff = l:scrolloffsave
+endfunction
+
+function! DelEmptyLineBelow()
+    if line(".") == line("$")
+        return
+    endif
+    let l:line = getline(line(".") + 1)
+    if l:line =~ '^\s*$'
+        let l:colsave = col(".")
+        .+1d
+        ''
+        call cursor(line("."), l:colsave)
+    endif
+endfunction
+
+function! AddEmptyLineBelow()
+    call append(line("."), "")
+endfunction
+
+" Arrow key remapping: Up/Dn = move line up/dn; Left/Right = indent/unindent
+function! SetArrowKeysAsTextShifters()
+    map <silent> <Left> <<
+    map <silent> <Right> >>
+    noremap <silent> <Up> :call DelEmptyLineAbove()<CR>
+    noremap <silent> <Down>  :call AddEmptyLineAbove()<CR>
+    noremap <silent> <C-Up> :call DelEmptyLineBelow()<CR>
+    noremap <silent> <C-Down> :call AddEmptyLineBelow()<CR>
+    imap <silent> <Left> <C-D>
+    imap <silent> <Right> <C-T>
+    inoremap <silent> <Up> <Esc>:call DelEmptyLineAbove()<CR>a
+    inoremap <silent> <Down> <Esc>:call AddEmptyLineAbove()<CR>a
+    inoremap <silent> <C-Up> <Esc>:call DelEmptyLineBelow()<CR>a
+    inoremap <silent> <C-Down> <Esc>:call AddEmptyLineBelow()<CR>a
+endfunction
+
+" call SetArrowKeysAsTextShifters()
+
 " ------------------
 " TEMPLATES
 " ------------------
@@ -118,7 +181,6 @@ function! LoadTemplate()
     silent! 0r ~/.vim/skel/template.%:e
     syn match Todo "%\u\+%" containedIn=ALL
 endfunction
-
 
 " ------------------
 " AUTOCOMMANDS
@@ -136,6 +198,10 @@ augroup vimrc_autocmds
     autocmd BufRead,BufNewFile *.py,*.rb match Underlined '\%80v.*'
     " Set syntax highlighting for Wikipedia/Wikia source
     autocmd BufRead,BufNewFile *.wiki,*.wikia.*,*.wikipedia.org* setfiletype Wikipedia
+    " Syntax highlighting for Drupal modules
+    autocmd BufRead,BufNewFile *.info,*.module set filetype=php
+    " Syntax highlighting for Gemfile
+    autocmd BufRead,BufNewFile Gemfile set filetype=ruby
     " Automatically insert shebang for shell scripts, and make them executable
     autocmd BufWritePost *.sh :silent !chmod +x <afile>
     " Load template for new files
@@ -151,6 +217,7 @@ augroup vimrc_autocmds
     autocmd FileType ruby compiler ruby
     "autocmd FileType python compiler pylint
     autocmd FileType python SyntasticDisable python
+    autocmd FileType cucumber SyntasticDisable cucumber
     " Highlight .less files as .css
     autocmd BufRead,BufNewFile *.less setfiletype css
 augroup END
