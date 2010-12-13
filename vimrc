@@ -17,7 +17,7 @@ set showcmd
 set hlsearch
 set incsearch
 " Highlight the current line
-set cursorline
+"set cursorline
 
 " Ignore non-text files
 set wildignore=*.pyc,*.exe,*.pyo
@@ -30,8 +30,8 @@ set hidden
 
 " Reduce key mapping timeout
 set timeout
-set timeoutlen=200
-set ttimeoutlen=200
+set timeoutlen=300
+set ttimeoutlen=300
 
 " Don't add two spaces after periods when joining
 set nojoinspaces
@@ -103,8 +103,10 @@ inoremap <C-r> <C-o><C-r>
 map <leader>f :FufFile<CR>
 map <leader>b :FufBuffer<CR>
 map <leader>l :FufLine<CR>
+" Buffer navigation
 map <leader>n :bprevious<CR>
 map <leader>m :bnext<CR>
+map <leader>d :BD<CR>
 
 
 " ------------------
@@ -189,37 +191,43 @@ endfunction
 augroup vimrc_autocmds
     " Clear autocommands so they aren't duplicated
     autocmd!
+
     " Automatically re-load .vimrc when it's saved
     autocmd BufWritePost .vimrc source %
-    " Set indentation for different kinds of files
-    autocmd BufRead,BufNewFile *.rb,*.erb,*.html set shiftwidth=2|set tabstop=2
+
+    " Set indentation for various file types
+    autocmd BufRead,BufNewFile *.gemspec,*.rb,*.erb,*.html set shiftwidth=2|set tabstop=2
     autocmd BufRead,BufNewFile *.feature set shiftwidth=2|set tabstop=2|set expandtab
     autocmd BufRead,BufNewFile *.py set shiftwidth=4|set tabstop=4
     autocmd BufRead,BufNewFile *.py,*.rb match Underlined '\%80v.*'
-    " Set syntax highlighting for Wikipedia/Wikia source
-    autocmd BufRead,BufNewFile *.wiki,*.wikia.*,*.wikipedia.org* setfiletype Wikipedia
-    " Syntax highlighting for Drupal modules
+
+    " Set syntax highlighting for various file types
+    autocmd BufRead,BufNewFile *.wiki,*.wikia.*,*.wikipedia.org* set filetype=Wikipedia
     autocmd BufRead,BufNewFile *.info,*.module set filetype=php
-    " Syntax highlighting for Gemfile
     autocmd BufRead,BufNewFile Gemfile set filetype=ruby
+    autocmd BufRead,BufNewFile *.json set filetype=javascript
+    autocmd BufRead,BufNewFile *.less set filetype=css
+    autocmd BufRead,BufNewFile *.t2t set filetype=txt2tags
+    autocmd BufRead,BufNewFile *.md set filetype=markdown
+
     " Automatically insert shebang for shell scripts, and make them executable
     autocmd BufWritePost *.sh :silent !chmod +x <afile>
     " Load template for new files
     autocmd BufNewFile * call LoadTemplate()
     " Strip trailing whitespace on save
     autocmd BufWritePre * :call <SID>StripTrailingWhitespace()
+
     " Highlight the status line depending on insert mode
     autocmd InsertEnter * call InsertStatuslineColor(v:insertmode)
     autocmd InsertLeave * hi statusline ctermbg=148
-    " Add txt2tags syntax highlighting
-    autocmd BufNewFile,BufRead *.t2t set ft=txt2tags
+
     " Enable compilers for ruby and python
     autocmd FileType ruby compiler ruby
     "autocmd FileType python compiler pylint
+
+    " Disable syntastic for some file types
     autocmd FileType python SyntasticDisable python
     autocmd FileType cucumber SyntasticDisable cucumber
-    " Highlight .less files as .css
-    autocmd BufRead,BufNewFile *.less setfiletype css
 augroup END
 
 " Run cucumber to see if there are any undefined steps,
