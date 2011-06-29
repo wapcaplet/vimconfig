@@ -39,9 +39,9 @@ function! StatuslineTabWarning()
         let spaces = search('^ ', 'nw') != 0
 
         if tabs && spaces
-            let b:statusline_tab_warning =  '[mixed-indenting]'
+            let b:statusline_tab_warning =  '[mixed-indent]'
         elseif (spaces && !&et) || (tabs && &et)
-            let b:statusline_tab_warning = '[&et]'
+            let b:statusline_tab_warning = '[expandtab]'
         else
             let b:statusline_tab_warning = ''
         endif
@@ -52,7 +52,7 @@ endfunction
 " Highlight the status line with a color depending on the insert mode
 function! InsertStatuslineColor(mode)
     if a:mode == 'i'
-        hi statusline ctermbg=117
+        hi statusline ctermbg=171
     elseif a:mode == 'r'
         hi statusline ctermbg=117
     else
