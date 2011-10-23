@@ -2,8 +2,8 @@
 "File:        syntastic.vim
 "Description: vim plugin for on the fly syntax checking
 "Maintainer:  Martin Grenfell <martin.grenfell at gmail dot com>
-"Version:     1.1.0
-"Last Change: 16 Dec, 2009
+"Version:     1.2.0
+"Last Change: 28 Oct, 2010
 "License:     This program is free software. It comes without any warranty,
 "             to the extent permitted by applicable law. You can redistribute
 "             it and/or modify it under the terms of the Do What The Fuck You
@@ -39,8 +39,7 @@ endif
 runtime! syntax_checkers/*.vim
 
 "refresh and redraw all the error info for this buf when saving or reading
-"autocmd bufreadpost,bufwritepost * call s:UpdateErrors()
-autocmd bufwritepost * call s:UpdateErrors()
+autocmd bufreadpost,bufwritepost * call s:UpdateErrors()
 function! s:UpdateErrors()
     call s:CacheErrors()
 
@@ -77,8 +76,7 @@ endfunction
 
 "return true if there are cached errors/warnings for this buf
 function! s:BufHasErrorsOrWarnings()
-    "return exists("b:syntastic_loclist") && !empty(b:syntastic_loclist)
-    return !empty(s:ActualErrors())
+    return exists("b:syntastic_loclist") && !empty(b:syntastic_loclist)
 endfunction
 
 "return true if there are cached errors for this buf
@@ -97,13 +95,6 @@ function! s:ErrorsForType(type)
     return filter(copy(b:syntastic_loclist), 'v:val["type"] ==# "' . a:type . '"')
 endfunction
 
-function! s:ActualErrors()
-    if !exists("b:syntastic_loclist")
-        return []
-    endif
-    return filter(copy(b:syntastic_loclist), 'v:val["lnum"] !=# 0')
-endfunction
-
 if g:syntastic_enable_signs
     "use >> to display syntax errors in the sign column
     sign define SyntasticError text=>> texthl=error
@@ -120,6 +111,10 @@ let s:next_sign_id = s:first_sign_id
 function s:SignErrors()
     if s:BufHasErrorsOrWarningsToDisplay()
         for i in b:syntastic_loclist
+            if i['bufnr'] != bufnr("")
+                continue
+            endif
+
             let sign_type = 'SyntasticError'
             if i['type'] == 'W'
                 let sign_type = 'SyntasticWarning'

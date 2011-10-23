@@ -85,8 +85,8 @@ let g:indent_guides_guide_size = 0
 let g:indent_guides_enable_on_vim_startup = 1
 let g:indent_guides_start_level = 2
 let g:indent_guides_indent_levels = 10
-autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd ctermbg=235
-autocmd VimEnter,Colorscheme * :hi IndentGuidesEven ctermbg=236
+autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd ctermbg=234
+autocmd VimEnter,Colorscheme * :hi IndentGuidesEven ctermbg=235
 
 " Enable filetype-based indentation
 filetype on
@@ -95,7 +95,7 @@ filetype plugin on
 
 " Display >... in place of tab characters
 set list
-set listchars=tab:>.,trail:.,nbsp:.
+set listchars=tab:>·,trail:·,nbsp:·
 
 
 " ------------------
@@ -221,30 +221,6 @@ augroup vimrc_autocmds
 
     " Automatically re-load .vimrc when it's saved
     autocmd BufWritePost .vimrc source %
-
-    " Set indentation for various file types
-    autocmd BufRead,BufNewFile *.gemspec,*.rb,*.erb,Rakefile set shiftwidth=2|set tabstop=2
-    autocmd BufRead,BufNewFile *.css,*.html,*.js set shiftwidth=2|set tabstop=2
-    autocmd BufRead,BufNewFile *.feature set shiftwidth=2|set tabstop=2|set expandtab
-    autocmd BufRead,BufNewFile *.yml,*.yaml set shiftwidth=2|set tabstop=2|set expandtab
-    autocmd BufRead,BufNewFile *.php set shiftwidth=2|set tabstop=2|set expandtab
-    autocmd BufRead,BufNewFile *.py set shiftwidth=4|set tabstop=4
-    autocmd BufRead,BufNewFile *.py,*.rb match Underlined '\%80v.*'
-    autocmd FileType ruby set shiftwidth=2|set tabstop=2
-
-    " Set syntax highlighting for various file types
-    autocmd BufRead,BufNewFile *.wiki,*.wikia.*,*.wikipedia.org* set filetype=Wikipedia
-    autocmd BufRead,BufNewFile *.info,*.module set filetype=php
-    autocmd BufRead,BufNewFile *.liquid set filetype=liquid
-    autocmd BufRead,BufNewFile Gemfile set filetype=ruby
-    autocmd BufRead,BufNewFile *.json set filetype=javascript
-    autocmd BufRead,BufNewFile *.less set filetype=css
-    autocmd BufRead,BufNewFile *.t2t set filetype=txt2tags
-    autocmd BufRead,BufNewFile *.md set filetype=markdown
-    autocmd BufRead,BufNewFile *.wsgi set filetype=python
-
-    " Set wrapping for various file types
-    autocmd BufRead,BufNewFile *.txt,*.rst set textwidth=80
 
     " Start at top of file when editing git/bzr commit messages
     autocmd BufRead,BufNewFile COMMIT_EDITMSG,bzr_log.* call cursor(1, 0)

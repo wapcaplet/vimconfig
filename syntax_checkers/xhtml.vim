@@ -1,5 +1,5 @@
 "============================================================================
-"File:        html.vim
+"File:        xhtml.vim
 "Description: Syntax checking plugin for syntastic.vim
 "Maintainer:  Martin Grenfell <martin.grenfell at gmail dot com>
 "License:     This program is free software. It comes without any warranty,
@@ -9,21 +9,19 @@
 "             See http://sam.zoy.org/wtfpl/COPYING for more details.
 "
 "============================================================================
-if exists("loaded_html_syntax_checker")
+if exists("loaded_xhtml_syntax_checker")
     finish
 endif
-let loaded_html_syntax_checker = 1
+let loaded_xhtml_syntax_checker = 1
 
 "bail if the user doesnt have tidy or grep installed
-if !executable("tidy") || !executable("grep")
+if !executable("tidy")
     finish
 endif
 
-function! SyntaxCheckers_html_GetLocList()
+function! SyntaxCheckers_xhtml_GetLocList()
 
-    "grep out the '<table> lacks "summary" attribute' since it is almost
-    "always present and almost always useless
-    let makeprg="tidy --new-blocklevel-tags 'section, article, aside, hgroup, header, footer, nav, figure, figcaption' --new-inline-tags 'video, audio, embed, mark, progress, meter, time, ruby, rt, rp, canvas, command, details, datalist' --new-empty-tags 'wbr, keygen' -e ".shellescape(expand('%'))." 2>&1 \\| grep -v '\<table\> lacks \"summary\" attribute' \\| grep -v 'not approved by W3C'"
+    let makeprg="tidy -xml -e ".shellescape(expand('%'))
     let errorformat='%Wline %l column %c - Warning: %m,%Eline %l column %c - Error: %m,%-G%.%#,%-G%.%#'
     let loclist = SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 

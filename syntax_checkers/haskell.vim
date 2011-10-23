@@ -22,9 +22,9 @@ endif
 " As this calls ghc, it can take a few seconds... maybe hlint or something
 " could do a good enough job?
 function! SyntaxCheckers_haskell_GetLocList()
-    " Use -W to turn on important warnings
-    let makeprg = 'ghc -W % -e :q'
+    let makeprg = 'ghc '.shellescape(expand('%')).' -e :q'
     let errorformat = '%-G\\s%#,%f:%l:%c:%m,%E%f:%l:%c:,%Z%m,'
+
 
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 endfunction

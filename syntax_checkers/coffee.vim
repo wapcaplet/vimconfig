@@ -1,7 +1,7 @@
 "============================================================================
-"File:        php.vim
+"File:        coffee.vim
 "Description: Syntax checking plugin for syntastic.vim
-"Maintainer:  Martin Grenfell <martin.grenfell at gmail dot com>
+"Maintainer:  Lincoln Stoll <l@lds.li>
 "License:     This program is free software. It comes without any warranty,
 "             to the extent permitted by applicable law. You can redistribute
 "             it and/or modify it under the terms of the Do What The Fuck You
@@ -9,18 +9,19 @@
 "             See http://sam.zoy.org/wtfpl/COPYING for more details.
 "
 "============================================================================
-if exists("loaded_php_syntax_checker")
+if exists("loaded_coffee_syntax_checker")
     finish
 endif
-let loaded_php_syntax_checker = 1
+let loaded_coffee_syntax_checker = 1
 
-"bail if the user doesnt have php installed
-if !executable("php")
+"bail if the user doesnt have ruby installed
+if !executable("coffee")
     finish
 endif
 
-function! SyntaxCheckers_php_GetLocList()
-    let makeprg = "php -l ".shellescape(expand('%'))
-    let errorformat='%-GNo syntax errors detected in%.%#,PHP Parse error: %#syntax %trror\, %m in %f on line %l,PHP Fatal %trror: %m in %f on line %l,%-GErrors parsing %.%#,%-G\s%#,Parse error: %#syntax %trror\, %m in %f on line %l,Fatal %trror: %m in %f on line %l'
+function! SyntaxCheckers_coffee_GetLocList()
+    let makeprg = 'coffee -c -l -o /dev/null %'
+    let errorformat =  '%EError: In %f\, Parse error on line %l: %m,%EError: In %f\, %m on line %l,%W%f(%l): lint warning: %m,%-Z%p^,%W%f(%l): warning: %m,%-Z%p^,%E%f(%l): SyntaxError: %m,%-Z%p^,%-G'
+
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 endfunction
