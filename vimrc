@@ -196,7 +196,7 @@ function! SetArrowKeysAsTextShifters()
     inoremap <silent> <C-Down> <Esc>:call AddEmptyLineBelow()<CR>a
 endfunction
 
-call SetArrowKeysAsTextShifters()
+" call SetArrowKeysAsTextShifters()
 
 " ------------------
 " TEMPLATES
