@@ -1,6 +1,3 @@
-" Taken from http://en.wikipedia.org/wiki/Wikipedia:Text_editor_support#Vim
-" Ian Tegebo <ian.tegebo@gmail.com>
-
 augroup filetypedetect
     au BufNewFile,BufRead *.wiki setf Wikipedia
 
@@ -16,7 +13,7 @@ augroup filetypedetect
 
     " Set syntax highlighting for various file types
     autocmd BufRead,BufNewFile *.wiki,*.wikia.*,*.wikipedia.org* set filetype=Wikipedia
-    autocmd BufRead,BufNewFile *.info,*.module set filetype=php
+    autocmd BufRead,BufNewFile *.info,*.module,*.install set filetype=php
     autocmd BufRead,BufNewFile *.liquid set filetype=liquid
     autocmd BufRead,BufNewFile Gemfile set filetype=ruby
     autocmd BufRead,BufNewFile *.json set filetype=javascript
@@ -27,6 +24,5 @@ augroup filetypedetect
 
     " Set wrapping for various file types
     autocmd BufRead,BufNewFile *.txt,*.rst,*.markdown set textwidth=80
-
 augroup END
 

@@ -134,7 +134,9 @@ map <leader>l :FufLine<CR>
 map <leader>n :bprevious<CR>
 map <leader>m :bnext<CR>
 map <leader>d :BD<CR>
-
+" F5 to execute current buffer
+nmap <silent> <unique> <F5> :w<CR>:call Bexec()<CR>
+vmap <silent> <unique> <F5> :w<CR>:call BexecVisual()<CR>
 
 " ------------------
 " ARROW KEYS
