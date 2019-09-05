@@ -2,6 +2,8 @@
 " INTERFACE PREFS
 " ------------------
 
+syntax on
+
 filetype off " So filetype will be refreshed for pathogen
 call pathogen#runtime_append_all_bundles()
 
